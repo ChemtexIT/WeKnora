@@ -80,8 +80,12 @@ const persistOIDCLoginResponse = async (response: any) => {
     throw new Error(response.message || 'OIDC login failed')
   }
 
+  // Clear stale localStorage data before setting new token
+  localStorage.removeItem('weknora_user')
+  localStorage.removeItem('weknora_tenant')
+  localStorage.removeItem('weknora_knowledge_bases')
+  localStorage.removeItem('weknora_current_kb')
   authStore.setToken(response.token)
-  axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.token
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.token
   if (response.refresh_token) {
     authStore.setRefreshToken(response.refresh_token)

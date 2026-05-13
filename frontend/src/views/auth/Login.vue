@@ -190,6 +190,9 @@
                 </div>
 
           <div class="form-content">
+
+          <!-- SSO-only mode: hide email/password form when OIDC is enabled -->
+          <template v-if="!oidcEnabled">
         <t-form
           ref="formRef"
           :data="formData"
@@ -239,6 +242,8 @@
           <div v-if="oidcEnabled" class="oidc-divider">
             <span>{{ $t('auth.orContinueWith') }}</span>
           </div>
+        </t-form>
+        </template>
 
           <t-button
             v-if="oidcEnabled"
@@ -252,7 +257,6 @@
           >
             {{ oidcLoading ? $t('auth.redirectingToOIDC') : oidcLoginText }}
           </t-button>
-        </t-form>
 
             <!-- Features list -->
             <div class="login-features">
@@ -272,8 +276,8 @@
       </div>
     </div>
 
-        <!-- Register Card -->
-        <div class="form-card" v-if="isRegisterMode">
+        <!-- Register Card (hidden when OIDC enabled) -->
+        <div class="form-card" v-if="oidcEnabled ? false : isRegisterMode">
           <div class="form-header">
             <h2 class="form-title">{{ $t('auth.createAccount') }}</h2>
             <p class="form-subtitle">{{ $t('auth.registerSubtitle') }}</p>
