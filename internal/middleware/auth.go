@@ -84,6 +84,13 @@ func Auth(
 
 		// 尝试JWT Token认证
 		authHeader := c.GetHeader("Authorization")
+		// Fallback: try reading token from cookie (set by OIDC callback)
+		if authHeader == "" {
+			cookieToken, err := c.Cookie("weknora_token")
+			if err == nil && cookieToken != "" {
+				authHeader = "Bearer " + cookieToken
+			}
+		}
 		if authHeader != "" && strings.HasPrefix(authHeader, "Bearer ") {
 			token := strings.TrimPrefix(authHeader, "Bearer ")
 			user, err := userService.ValidateToken(c.Request.Context(), token)

@@ -272,6 +272,12 @@ func (h *AuthHandler) OIDCRedirectCallback(c *gin.Context) {
 		return
 	}
 
+	// Set JWT token as cookie for frontend axios requests
+	c.SetCookie("weknora_token", resp.Token, 86400, "/", "", false, true)
+	if resp.RefreshToken != "" {
+		c.SetCookie("weknora_refresh_token", resp.RefreshToken, 86400*7, "/", "", false, true)
+	}
+
 	c.Redirect(http.StatusFound, frontendRedirectURI+"#oidc_result="+urlQueryEscape(payload))
 }
 
