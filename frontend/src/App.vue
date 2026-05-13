@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import axios from 'axios'
 import { MessagePlugin } from 'tdesign-vue-next'
 import ManualKnowledgeEditor from '@/components/manual-knowledge-editor.vue'
 import { useAuthStore } from '@/stores/auth'
@@ -80,6 +81,8 @@ const persistOIDCLoginResponse = async (response: any) => {
   }
 
   authStore.setToken(response.token)
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.token
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.token
   if (response.refresh_token) {
     authStore.setRefreshToken(response.refresh_token)
   }

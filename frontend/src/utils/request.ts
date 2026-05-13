@@ -29,7 +29,8 @@ function getCurrentLanguage(): string {
 instance.interceptors.request.use(
   (config) => {
     // 添加JWT token认证
-    const token = localStorage.getItem('weknora_token');
+    const defaultAuth = axios.defaults.headers.common['Authorization'] as string;
+    const token = defaultAuth ? defaultAuth.replace('Bearer ', '') : localStorage.getItem('weknora_token');
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
